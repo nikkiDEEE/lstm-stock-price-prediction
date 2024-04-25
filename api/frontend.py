@@ -1,15 +1,27 @@
 from fastapi import FastAPI
 from nicegui import app, ui
+from nicegui.events import KeyEventArguments
 
 def init(fastapi_app: FastAPI) -> None:
+
+    ticker_list = set()
+    all_tickers = gt.get_tickers(NYSE=True, NASDAQ=True, AMEX=True)
+
     @ui.page('/')
     def show():
-        ui.input(label="Enter a stock ticker:",
-                placeholder="e.g., AAPL",
-                on_change=lambda x: ticker.set_text("Searching for: " + x.value),
-                validation={"Input expects a ticker symbol": lambda value: len(value) == 4}  
-            )
-        ticker = ui.label()
+        ticker = ui.input(label="Enter a stock ticker:",
+                          placeholder="e.g., AAPL",
+                          validation={"Input expects a ticker symbol": lambda value: len(value) <= 4},
+                          autocomplete=all_tickers
+                    )
+
+        def handle_key(e: KeyEventArguments):
+            if e.key == "Enter" and e.action.keydown:
+                ui.notify(f"{e.key} was just pressed!")
+                ticker_list.add(ticker.value)
+                print(ticker_list)
+
+        keyboard = ui.keyboard(on_key=handle_key)
 
         ui.dark_mode().bind_value(app.storage.user, 'dark_mode')
         ui.checkbox('dark mode').bind_value(app.storage.user, 'dark_mode')

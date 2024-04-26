@@ -1,27 +1,32 @@
 from fastapi import FastAPI
 from nicegui import app, ui
-from nicegui.events import KeyEventArguments
+from backend import process_tickers
+
+def handle_add_click(ticker, ticker_list, ticker_display):
+    ticker_value = (ticker.value).upper()
+    ui.notify(f"{ticker_value} added!")
+    ticker_list.add(ticker_value)
+    ticker_display.set_text("\n".join(sorted(ticker_list)))
+
+def handle_submit_click(ticker_list):
+    ui.notify("Submitting tickers...")
+    process_tickers(ticker_list)
 
 def init(fastapi_app: FastAPI) -> None:
 
     ticker_list = set()
-    all_tickers = gt.get_tickers(NYSE=True, NASDAQ=True, AMEX=True)
 
     @ui.page('/')
     def show():
-        ticker = ui.input(label="Enter a stock ticker:",
+        ticker = ui.input(label="Enter a ticker symbol:",
                           placeholder="e.g., AAPL",
                           validation={"Input expects a ticker symbol": lambda value: len(value) <= 4},
-                          autocomplete=all_tickers
                     )
 
-        def handle_key(e: KeyEventArguments):
-            if e.key == "Enter" and e.action.keydown:
-                ui.notify(f"{e.key} was just pressed!")
-                ticker_list.add(ticker.value)
-                print(ticker_list)
+        ticker_display = ui.label("[ Tickers added appear here ]")
 
-        keyboard = ui.keyboard(on_key=handle_key)
+        ui.button("Add ticker", on_click=lambda: handle_add_click(ticker, ticker_list, ticker_display))
+        ui.button("Submit", on_click=lambda: handle_submit_click(ticker_list))
 
         ui.dark_mode().bind_value(app.storage.user, 'dark_mode')
         ui.checkbox('dark mode').bind_value(app.storage.user, 'dark_mode')

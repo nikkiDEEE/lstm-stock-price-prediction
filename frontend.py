@@ -16,8 +16,9 @@ def handle_add_click(ticker, ticker_list, ticker_display):
         ticker_display.set_text("\n".join(ticker_list))
 
 def handle_submit_click(ticker_list):
-    ui.notify("Submitting tickers...")
     process_tickers(ticker_list)
+    ui.notify("Submitting tickers, you will be redirected shortly...")
+    ui.spinner(size='lg').classes('absolute-center')
     # ticker_values = get_ticker_values(ticker_list)  # Get values for tickers
     # results_page.set_values(ticker_values)  # Pass values to results page
     # app.router.navigate(results_page)  # Navigate to results page
@@ -31,7 +32,6 @@ def init(fastapi_app: FastAPI) -> None:
         ticker = ui.input(label="Enter a ticker symbol:",
                           placeholder="e.g., AAPL",
                           validation={"Input expects a ticker symbol": lambda value: value.upper() in all_tickers},
-                          autocomplete=list(all_tickers)
                     )
 
         ticker_display = ui.label("[ Tickers added appear here ]")
@@ -39,8 +39,11 @@ def init(fastapi_app: FastAPI) -> None:
         ui.button("Add ticker", on_click=lambda: handle_add_click(ticker, ticker_list, ticker_display))
         ui.button("Submit", on_click=lambda: handle_submit_click(ticker_list))
 
-        ui.dark_mode().bind_value(app.storage.user, 'dark_mode')
-        ui.checkbox('dark mode').bind_value(app.storage.user, 'dark_mode')
+        ui.dark_mode().auto()
+
+    @fastapi_app.get('/results')
+    async def results_page():
+        return "Results will be displayed here"
 
     ui.run_with(
         fastapi_app,

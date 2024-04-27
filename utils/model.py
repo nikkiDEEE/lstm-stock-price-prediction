@@ -14,6 +14,32 @@ from preprocess_utils import train_test_split, get_df
 
 class Model:
     def __init__(self, ticker, window_size=91, start_year=2000):
+        """
+        Initializes the model with the given ticker, window size, and start year. 
+        Retrieves the DataFrame for the given ticker, scales the 'Close' column, splits the data into training, validation, and test sets, creates the LSTM model, and trains it on the training and validation data.
+        
+        Args:
+            ticker (str): The stock ticker to use for the model.
+            window_size (int, optional): The size of the sliding window to use for the LSTM model. Defaults to 91.
+            start_year (int, optional): The start year for the stock data. Defaults to 2000.
+        
+        Attributes:
+            ticker (str): The stock ticker used for the model.
+            window_size (int): The size of the sliding window used for the LSTM model.
+            start_year (int): The start year for the stock data.
+            df (pandas.DataFrame): The DataFrame containing the stock data.
+            scaler (sklearn.preprocessing.MinMaxScaler): The scaler used to scale the 'Close' column.
+            scaled_df (pandas.DataFrame): The scaled DataFrame.
+            X_train (numpy.ndarray): The training input data.
+            y_train (numpy.ndarray): The training output data.
+            X_val (numpy.ndarray): The validation input data.
+            y_val (numpy.ndarray): The validation output data.
+            X_test (numpy.ndarray): The test input data.
+            y_test (numpy.ndarray): The test output data.
+            model (keras.models.Sequential): The LSTM model.
+            loss (float): The loss of the model on the test data.
+
+        """
         self.ticker = str(ticker)
         self.window_size = int(window_size)
         self.start_year = int(start_year)
@@ -29,6 +55,13 @@ class Model:
 
 
     def scale_df(self):
+        """
+        Scales the 'Close' column of the DataFrame `df` using the `scaler` attribute.
+        
+        Returns:
+            A copy of the DataFrame `df` with the 'Close' column scaled.
+
+        """
         df_copy = self.df.copy()
         df_copy.loc[:, 'Close'] = self.scaler.fit_transform(df_copy[['Close']]).flatten()
 
@@ -36,6 +69,18 @@ class Model:
 
 
     def create_model(self):
+        """
+        Creates a sequential LSTM model for time series forecasting.
+        
+        The model consists of three LSTM layers with 50 units each, followed by a Dropout layer with a rate of 0.2 after each LSTM layer.
+        The final layer is a Dense layer with a single unit, which outputs the predicted value.
+        
+        The model is compiled with the 'adam' optimizer and 'mean_squared_error' loss function.
+        
+        Returns:
+            A compiled Keras Sequential model.
+
+        """
         model = Sequential()
         model.add(LSTM(units=50, return_sequences=True, input_shape=(self.X_train.shape[1], self.X_train.shape[2])))
         model.add(Dropout(0.2))
@@ -51,6 +96,13 @@ class Model:
     
 
     def plot_test_preds(self):
+        """
+        Plots the actual vs predicted trend on the test data.
+        
+        Returns:
+            go.Figure: A Plotly figure object containing the plot of the actual and predicted data on the test set.
+
+        """
         y_pred = self.model.predict(self.X_test)
         y_pred = self.scaler.inverse_transform(y_pred)
         y_test = self.scaler.inverse_transform(self.y_test.reshape(-1, 1))
@@ -72,6 +124,13 @@ class Model:
         return fig
     
     def get_future_window(self):
+        """
+        Generates a window of future predictions based on the last window of the input data.
+        
+        Returns:
+            np.ndarray: A 3D numpy array containing the predicted future window. The shape of the array is (1, window_size, 1), where window_size is the size of the prediction window.
+
+        """
         last_window = np.array(self.scaled_df['Close'].iloc[-self.window_size:])
         preds = np.reshape(last_window, (1, self.window_size, 1))
 
@@ -83,6 +142,13 @@ class Model:
         return preds
     
     def plot_future_trend(self):
+        """
+        Plots a figure that displays the historical data and the predicted future trend.
+        
+        Returns:
+            go.Figure: A Plotly figure object containing the plot of the historical data and the predicted future trend.
+            
+        """
         future_date_range = pd.date_range(start=self.df.index[-1] + pd.Timedelta(days=1), periods=self.window_size)
         preds = self.get_future_window()
         future_df = pd.DataFrame(preds.squeeze(), index=future_date_range, columns=['Close'])

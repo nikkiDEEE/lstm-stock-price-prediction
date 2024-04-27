@@ -5,6 +5,19 @@ import yfinance as yf
 from sklearn.model_selection import TimeSeriesSplit
 
 def get_ticker_data(ticker):
+    """
+    Retrieves the stock name and exchange for a given ticker symbol.
+    
+    Args:
+        ticker (str): The ticker symbol to look up.
+    
+    Returns:
+        tuple: A tuple containing the following elements:
+            - ticker (str): The input ticker symbol.
+            - stock_name (str): The name of the stock associated with the ticker symbol, or None if not found.
+            - exchange (str): The exchange the stock is traded on, or None if not found.
+            
+    """
     try:
         df = pd.read_csv("data/tickers.csv")
     except FileNotFoundError:
@@ -22,6 +35,13 @@ def get_ticker_data(ticker):
 
 
 def get_all_tickers():
+    """
+    Retrieves a set of all tickers from a CSV file located at "data/tickers.csv".
+    
+    Returns:
+        set: A set of all tickers, or None if the CSV file is not found.
+        
+    """
     try:
         df = pd.read_csv("data/tickers.csv")
     except FileNotFoundError:
@@ -41,6 +61,23 @@ def get_df(symbol, start_year=1980):
 
 
 def train_test_split(df, window_size):
+    """
+    Splits a given DataFrame `df` into training, validation, and test sets using a time series split.
+    
+    Args:
+        df (pandas.DataFrame): The input DataFrame containing the data to be split.
+        window_size (int): The size of the sliding window used to create the input features.
+    
+    Returns:
+        tuple: A tuple containing the following elements:
+            - X_train (numpy.ndarray): The training input features.
+            - y_train (numpy.ndarray): The training target values.
+            - X_val (numpy.ndarray): The validation input features.
+            - y_val (numpy.ndarray): The validation target values.
+            - X_test (numpy.ndarray): The test input features.
+            - y_test (numpy.ndarray): The test target values.
+
+    """
     X, y = [], []
 
     for i in range(window_size, len(df)):

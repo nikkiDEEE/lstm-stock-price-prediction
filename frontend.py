@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from nicegui import app, ui
+
 from backend import process_tickers
 from utils.preprocess_utils import get_ticker_data, get_all_tickers
 
@@ -15,13 +16,6 @@ def handle_add_click(ticker, ticker_list, ticker_display):
         ticker_list.add(ticker)
         ticker_display.set_text("\n".join(ticker_list))
 
-def handle_submit_click(ticker_list):
-    process_tickers(ticker_list)
-    ui.notify("Submitting tickers, you will be redirected shortly...")
-    ui.spinner(size='lg').classes('absolute-center')
-    # ticker_values = get_ticker_values(ticker_list)  # Get values for tickers
-    # results_page.set_values(ticker_values)  # Pass values to results page
-    # app.router.navigate(results_page)  # Navigate to results page
 
 def init(fastapi_app: FastAPI) -> None:
 
@@ -37,13 +31,18 @@ def init(fastapi_app: FastAPI) -> None:
         ticker_display = ui.label("[ Tickers added appear here ]")
 
         ui.button("Add ticker", on_click=lambda: handle_add_click(ticker, ticker_list, ticker_display))
-        ui.button("Submit", on_click=lambda: handle_submit_click(ticker_list))
+
+        def handle_submit_click(ticker_list):
+            plots = process_tickers(list(ticker_list))
+            for ticker, test_preds_fig, future_trend_fig in plots:
+                with ui.row():
+                    ui.label(f"{ticker} - Test Predictions").classes('text-lg font-bold')
+                    ui.plotly(test_preds_fig)
+                    ui.plotly(future_trend_fig)
+
+        ui.button("Submit", on_click=handle_submit_click(ticker_list))
 
         ui.dark_mode().auto()
-
-    @fastapi_app.get('/results')
-    async def results_page():
-        return "Results will be displayed here"
 
     ui.run_with(
         fastapi_app,

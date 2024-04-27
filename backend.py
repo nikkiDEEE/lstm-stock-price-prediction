@@ -1,7 +1,12 @@
-import numpy as np
-from model import model
-from utils import preprocess_utils, postprocess_utils
+from utils import model
 
+def process_tickers(ticker_list):
+    print("GG LAH")
+    plots = []
+    for ticker in ticker_list:
+        model_obj = model.Model(ticker)
+        test_preds_fig = model_obj.plot_test_preds()
+        future_trend_fig = model_obj.plot_future_trend()
+        plots.append((ticker, test_preds_fig, future_trend_fig))
 
-def process_tickers(ticker_list: list):
-    return 0
+    return plots

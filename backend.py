@@ -1,7 +1,6 @@
 from utils import model
 
 def process_tickers(ticker_list):
-    print("GG LAH")
     plots = []
     for ticker in ticker_list:
         model_obj = model.Model(ticker)

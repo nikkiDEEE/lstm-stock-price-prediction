@@ -36,7 +36,8 @@ def init(fastapi_app: FastAPI) -> None:
             plots = process_tickers(list(ticker_list))
             for ticker, test_preds_fig, future_trend_fig in plots:
                 with ui.row():
-                    ui.label(f"{ticker} - Test Predictions").classes('text-lg font-bold')
+                    _, stock_name, exchange = get_ticker_data(ticker)
+                    ui.label(f"{ticker} - {stock_name} - {exchange}").classes('text-lg font-bold')
                     ui.plotly(test_preds_fig)
                     ui.plotly(future_trend_fig)
 

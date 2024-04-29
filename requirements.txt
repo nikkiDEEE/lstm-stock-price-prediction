@@ -79,6 +79,7 @@ jupyter_server_terminals @ file:///home/conda/feedstock_root/build_artifacts/jup
 jupyterlab @ file:///home/conda/feedstock_root/build_artifacts/jupyterlab_1712586972478/work
 jupyterlab_pygments @ file:///home/conda/feedstock_root/build_artifacts/jupyterlab_pygments_1707149102966/work
 jupyterlab_server @ file:///home/conda/feedstock_root/build_artifacts/jupyterlab_server-split_1712583928460/work
+kaleido @ file:///home/conda/feedstock_root/build_artifacts/python-kaleido_1615204619408/work
 keras @ file:///home/conda/feedstock_root/build_artifacts/keras_1700038168849/work/keras-2.15.0-py3-none-any.whl#sha256=2dcc6d2e30cf9c951064b63c1f4c404b966c59caf09e01f3549138ec8ee0dd1f
 kiwisolver @ file:///home/conda/feedstock_root/build_artifacts/kiwisolver_1695379920604/work
 lxml @ file:///home/conda/feedstock_root/build_artifacts/lxml_1713572446717/work
@@ -117,6 +118,7 @@ pickleshare @ file:///home/conda/feedstock_root/build_artifacts/pickleshare_1602
 pillow @ file:///home/conda/feedstock_root/build_artifacts/pillow_1712154447422/work
 pkgutil_resolve_name @ file:///home/conda/feedstock_root/build_artifacts/pkgutil-resolve-name_1694617248815/work
 platformdirs @ file:///home/conda/feedstock_root/build_artifacts/platformdirs_1706713388748/work
+plotly @ file:///home/conda/feedstock_root/build_artifacts/plotly_1713380814960/work
 ply @ file:///home/conda/feedstock_root/build_artifacts/ply_1712242996588/work
 prometheus_client @ file:///home/conda/feedstock_root/build_artifacts/prometheus_client_1707932675456/work
 prompt-toolkit @ file:///home/conda/feedstock_root/build_artifacts/prompt-toolkit_1702399386289/work
@@ -164,6 +166,7 @@ sniffio @ file:///home/conda/feedstock_root/build_artifacts/sniffio_170895293230
 soupsieve @ file:///home/conda/feedstock_root/build_artifacts/soupsieve_1693929250441/work
 stack-data @ file:///home/conda/feedstock_root/build_artifacts/stack_data_1669632077133/work
 starlette @ file:///home/conda/feedstock_root/build_artifacts/starlette-recipe_1707149932752/work
+tenacity @ file:///home/conda/feedstock_root/build_artifacts/tenacity_1692026804430/work
 tensorboard @ file:///home/conda/feedstock_root/build_artifacts/tensorboard_1707486779203/work/tensorboard-2.15.2-py3-none-any.whl#sha256=a6f6443728064d962caea6d34653e220e34ef8df764cb06a8212c17e1a8f0622
 tensorboard-data-server @ file:///home/conda/feedstock_root/build_artifacts/tensorboard-data-server_1695425375375/work/tensorboard_data_server-0.7.0-py3-none-manylinux2014_x86_64.whl#sha256=4a87e32f17958007f01c1acb90cf7aab5877e41b1a929e3a016020697c37b53d
 tensorflow @ file:///home/conda/feedstock_root/build_artifacts/tensorflow-split_1706556017615/work/tensorflow_pkg/tensorflow-2.15.0-cp311-cp311-linux_x86_64.whl#sha256=b146dfc4295b89148e1222bb081b4b4beb7a104be1f53ec328fa9386fe69d380

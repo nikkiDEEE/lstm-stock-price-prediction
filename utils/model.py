@@ -50,7 +50,7 @@ class Model:
         self.X_train, self.y_train, self.X_val, self.y_val, self.X_test, self.y_test = train_test_split(self.scaled_df, self.window_size)
 
         self.model = self.create_model()
-        self.model.fit(self.X_train, self.y_train, epochs=1, batch_size=32, validation_data=(self.X_val, self.y_val))
+        self.model.fit(self.X_train, self.y_train, epochs=50, batch_size=32, validation_data=(self.X_val, self.y_val))
         self.loss = self.model.evaluate(self.X_test, self.y_test)
 
 
